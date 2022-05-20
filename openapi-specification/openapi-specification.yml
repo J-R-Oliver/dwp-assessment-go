@@ -1,0 +1,155 @@
+openapi: "3.0.3"
+
+info:
+  version: 1.0.0
+  title: DWP Assessment
+  description: An API which calls the API at https://bpdts-test-app.herokuapp.com/, and returns people who are listed as either living in London, or whose current coordinates are within 50 miles of London.
+
+tags:
+  - name: People
+    description: Retrieves people.
+
+paths:
+  /api/people:
+    get:
+      operationId: getPeople
+      summary: Retrieve all people.
+      description: Retrieve all people available from the bpdts-test-app API.
+      tags:
+        - People
+      responses:
+        200:
+          description: Successfully retrieved all people.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/People'
+              example:
+                PersonExample:
+                  ref: '#/components/schemas/PersonExample'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+  /api/people/{city}:
+    get:
+      operationId: getPeopleByCity
+      summary: Retrieve people who live in city.
+      description: Retrieve people who live in city within fifty miles.
+      tags:
+        - People
+      parameters:
+        - in: path
+          name: city
+          description: City parameter to filter people. Currently this endpoint only supports London.
+          required: true
+          schema:
+            type: string
+            enum:
+              - london
+        - in: query
+          name: distance
+          description: Distance from city in miles from one to one hundred. Defaults to fifty miles.
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+      responses:
+        200:
+          description: Successfully retrieved all people from city.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/People'
+        404:
+          description: City not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                404Example:
+                  $ref: '#/components/examples/404Example'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+components:
+  responses:
+    500InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            500Example:
+              $ref: '#/components/examples/500Example'
+
+  schemas:
+    People:
+      type: object
+      properties:
+        persons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        ipAddress:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+
+    Error:
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        message:
+          type: string
+        path:
+          type: string
+
+  examples:
+    PersonExample:
+      summary: Example person object.
+      value:
+        id: 21
+        firstName: Alan
+        lastName: Partridge
+        email: a.partridge@bbc.co.uk
+        ipAddress: 236.54.90.236
+        latitude: 33.5068235
+        longitude: 70.6960868
+
+    404Example:
+      summary: Example 404 error response.
+      value:
+        timestamp: 2022-05-19T06:53:23+0000
+        status: 404
+        message: City not found
+        path: /api/people/atlantis
+
+    500Example:
+      summary: Example 500 error response.
+      value:
+        timestamp: 2022-05-19T06:53:23+0000
+        status: 500
+        message: Internal server error
+        path: /api/people
