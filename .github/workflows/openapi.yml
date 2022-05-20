@@ -1,0 +1,20 @@
+name: OpenAPI
+
+on: [ push ]
+
+jobs:
+  OpenAPI-Validator:
+    name: Validate OpenAPI Specification
+    runs-on: ubuntu-latest
+    services:
+      swagger-editor:
+        image: swaggerapi/swagger-editor:v4.2.7
+        ports:
+          - 8080:8080
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate OpenAPI definition
+        uses: char0n/swagger-editor-validate@v1
+        with:
+          swagger-editor-url: http://localhost:8080/
+          definition-file: openapi-specification/openapi-specification.yml
