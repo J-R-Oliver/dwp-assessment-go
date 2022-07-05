@@ -5,6 +5,9 @@ info:
   title: DWP Assessment
   description: An API which calls the API at https://bpdts-test-app.herokuapp.com/, and returns people who are listed as either living in London, or whose current coordinates are within 50 miles of London.
 
+servers:
+  - url: http://localhost:8080/v1
+
 tags:
   - name: People
     description: Retrieves people.
@@ -12,8 +15,8 @@ tags:
 paths:
   /api/people:
     get:
-      operationId: getPeople
-      summary: Retrieve all people.
+      operationId: list_people
+      summary: Retrieve all people
       description: Retrieve all people available from the bpdts-test-app API.
       tags:
         - People
@@ -24,16 +27,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/People'
-              example:
-                PersonExample:
-                  ref: '#/components/schemas/PersonExample'
         500:
           $ref: '#/components/responses/500InternalServerError'
 
   /api/people/{city}:
     get:
-      operationId: getPeopleByCity
-      summary: Retrieve people who live in city.
+      operationId: get_people_by_city
+      summary: Retrieve people who live in city
       description: Retrieve people who live in city within fifty miles.
       tags:
         - People
@@ -93,19 +93,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Person'
+      example:
+        - id: 21
+          firstName: Alan
+          lastName: Partridge
+          email: a.partridge@bbc.co.uk
+          ipAddress: 236.54.90.236
+          latitude: 33.5068235
+          longitude: 70.6960868
 
     Person:
       type: object
       properties:
         id:
           type: integer
-        firstName:
+        first_name:
           type: string
-        lastName:
+        last_name:
           type: string
         email:
           type: string
-        ipAddress:
+        ip_address:
           type: string
         latitude:
           type: number
@@ -127,17 +135,6 @@ components:
           type: string
 
   examples:
-    PersonExample:
-      summary: Example person object.
-      value:
-        id: 21
-        firstName: Alan
-        lastName: Partridge
-        email: a.partridge@bbc.co.uk
-        ipAddress: 236.54.90.236
-        latitude: 33.5068235
-        longitude: 70.6960868
-
     404Example:
       summary: Example 404 error response.
       value:

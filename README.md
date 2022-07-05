@@ -1,7 +1,7 @@
 # DWP Assessment Go
 
+![Build](github.com/J-R-Oliver/dwp-assessment-go/actions/workflows/integration/badge.svg)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
-
 
 <table>
 <tr>
@@ -14,7 +14,7 @@ in London, or whose current coordinates are within 50 miles of London.
 
 ## Contents
 
-- [Conventional Commits](#maven-git-commit)
+- [Conventional Commits](#conventional-commits)
 
 ## Conventional Commits
 
@@ -31,4 +31,4 @@ pre-commit install
 
 ...to add a commit [Git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) to your local machine.
 
-An automated pipeline job has been [configured](.github/workflows/git.yml) to lint commit messages on a push. 
+An automated pipeline job has been [configured](.github/workflows/build.yml) to lint commit messages on a push. 

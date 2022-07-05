@@ -1,0 +1,11 @@
+# Default ignore everything
+*
+
+# Add files or folders starting with !
+!cmd
+!dwp
+!internal
+!logging
+!configuration.yml
+!go.mod
+!go.sum
