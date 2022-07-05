@@ -4,118 +4,118 @@ on:
   push:
 
 jobs:
-#  Git:
-#    name: Git
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#      - name: Commit Lint
-#        uses: webiny/action-conventional-commits@v1.0.5
-#      - name: Secrets Scan
-#        uses: gitleaks/gitleaks-action@v2
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: Shell Lint
-#        uses: luizm/action-sh-checker@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      - name: Outstanding Todos
-#        run: |
-#          echo Checking for outstanding todos...
-#          TODO_COUNT=$(grep -r '[\/\/#] [Tt][Oo][Dd][Oo]' . | wc -l)
-#          if [[ $TODO_COUNT -gt 0 ]] ; then
-#            echo "$TODO_COUNT" todos found...
-#            grep -r '[\/\/#] [Tt][Oo][Dd][Oo]' .
-#            exit 1
-#          fi
-#          echo No todos found...
-#
-#
-#  OpenAPI-Validator:
-#    name: Validate OpenAPI Specification
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v3
-#      - name: Setup Node.js
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
-#      - name: Install IBM OpenAPI Validator
-#        run: npm install -g ibm-openapi-validator
-#      - name: Validate OpenAPI definition
-#        run: lint-openapi --verbose --report_statistics openapi-specification/openapi-specification.yml
-#
-#
-#  Go:
-#    name: Go
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v3
-#      - name: Setup Go
-#        uses: actions/setup-go@v3
-#        with:
-#          go-version-file: go.mod
-#      - name: Cache Go modules
-#        id: cache-go-modules
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/go/pkg/mod
-#          key: ${{ runner.os }}-build-go-${{ hashFiles('**/go.sum') }}
-#          restore-keys: |
-#            ${{ runner.os }}-build-go-
-#            ${{ runner.os }}-build-
-#            ${{ runner.os }}-
-#      - name: Verify Cached Dependencies
-#        if: ${{ steps.cache-go-modules.outputs.cache-hit != false }}
-#        run: go mod verify
-#      - name: Go Build
-#        run: go build -v ./...
-#      - name: Go Vet
-#        run: go vet ./...
-#      - name: Golangci-lint
-#        uses: golangci/golangci-lint-action@v3
-#      - name: Staticcheck
-#        uses: dominikh/staticcheck-action@v1.2.0
-#        with:
-#          install-go: false
-#          cache-key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/go.sum') }}
-#      - name: Unit Tests
-#        run: go test -v -race -vet=off ./...
-#      - name: Test Coverage
-#        uses: dell/common-github-actions/go-code-tester@main
-#        with:
-#          threshold: 95
-#      - name: Output Dependencies
-#        run: go list -json -deps ./... > go.list
-#      - name: Audit Dependencies
-#        uses: sonatype-nexus-community/nancy-github-action@main
-#      - name: Outdated Dependencies
-#        run: |
-#          echo Checking for outdated dependencies...
-#          OUTDATED_COUNT=$(go list -u -m -f '{{if and .Update (not .Indirect)}}{{.}}{{end}}' all | wc -l)
-#          if [[ OUTDATED_COUNT -gt 0 ]] ; then
-#            echo "OUTDATED_COUNT" outdated dependencies found...
-#            go list -u -m -f '{{if and .Update (not .Indirect)}}{{.}}{{end}}' all
-#            exit 1
-#          fi
-#          echo No outdated dependencies found...
+  Git:
+    name: Git
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Commit Lint
+        uses: webiny/action-conventional-commits@v1.0.5
+      - name: Secrets Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Shell Lint
+        uses: luizm/action-sh-checker@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Outstanding Todos
+        run: |
+          echo Checking for outstanding todos...
+          TODO_COUNT=$(grep -r '[\/\/#] [Tt][Oo][Dd][Oo]' . | wc -l)
+          if [[ $TODO_COUNT -gt 0 ]] ; then
+            echo "$TODO_COUNT" todos found...
+            grep -r '[\/\/#] [Tt][Oo][Dd][Oo]' .
+            exit 1
+          fi
+          echo No todos found...
+
+
+  OpenAPI-Validator:
+    name: Validate OpenAPI Specification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install IBM OpenAPI Validator
+        run: npm install -g ibm-openapi-validator
+      - name: Validate OpenAPI definition
+        run: lint-openapi --verbose --report_statistics openapi-specification/openapi-specification.yml
+
+
+  Go:
+    name: Go
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: go.mod
+      - name: Cache Go modules
+        id: cache-go-modules
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-build-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-build-go-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Verify Cached Dependencies
+        if: ${{ steps.cache-go-modules.outputs.cache-hit != false }}
+        run: go mod verify
+      - name: Go Build
+        run: go build -v ./...
+      - name: Go Vet
+        run: go vet ./...
+      - name: Golangci-lint
+        uses: golangci/golangci-lint-action@v3
+      - name: Staticcheck
+        uses: dominikh/staticcheck-action@v1.2.0
+        with:
+          install-go: false
+          cache-key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/go.sum') }}
+      - name: Unit Tests
+        run: go test -v -race -vet=off ./...
+      - name: Test Coverage
+        uses: dell/common-github-actions/go-code-tester@main
+        with:
+          threshold: 95
+      - name: Output Dependencies
+        run: go list -json -deps ./... > go.list
+      - name: Audit Dependencies
+        uses: sonatype-nexus-community/nancy-github-action@main
+      - name: Outdated Dependencies
+        run: |
+          echo Checking for outdated dependencies...
+          OUTDATED_COUNT=$(go list -u -m -f '{{if and .Update (not .Indirect)}}{{.}}{{end}}' all | wc -l)
+          if [[ OUTDATED_COUNT -gt 0 ]] ; then
+            echo "OUTDATED_COUNT" outdated dependencies found...
+            go list -u -m -f '{{if and .Update (not .Indirect)}}{{.}}{{end}}' all
+            exit 1
+          fi
+          echo No outdated dependencies found...
         
 
   Docker:
     name: Docker
     runs-on: ubuntu-latest
-#    needs:
-#      - Git
-#      - OpenAPI-Validator
-#      - Go
+    needs:
+      - Git
+      - OpenAPI-Validator
+      - Go
 
     steps:
       - name: Checkout repository

@@ -17,6 +17,7 @@ metadataTest:
   exposedPorts: ["8080"]
   cmd: ["/app/dwp-assessment-go"]
   workdir: "/app"
+#  user: "nonroot:nonroot" # user key is currently unsupported in GitHub Actions
 
 fileExistenceTests:
   - name: 'Go executable'
