@@ -140,9 +140,9 @@ jobs:
         with:
           sarif_file: trivy-results.sarif
       - name: Container Structure Tests
-        uses: brpaz/structure-tests-action@v1.1.2
+        uses: plexsystems/container-structure-test-action@v0.2.0
         with:
           image: j-r-oliver/dwp-assessment-go:${{ github.ref_name }}
-          configFile: container-tests.yaml
+          config: container-tests.yaml
       - name: API Tests
         run: docker-compose up --renew-anon-volumes --exit-code-from api-test
