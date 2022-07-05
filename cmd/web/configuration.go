@@ -28,7 +28,7 @@ type configuration struct {
 }
 
 func loadConfiguration() configuration {
-	configFile, err := ioutil.ReadFile("configuration.yml")
+	configFile, err := ioutil.ReadFile("configuration.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}

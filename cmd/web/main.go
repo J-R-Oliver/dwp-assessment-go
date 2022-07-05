@@ -25,8 +25,8 @@ func main() {
 	handler := panicHandler(serveMux)
 	logRequestHandler(handler)
 
-	log.Info("Starting server on :8080")
+	log.Info("Starting server on :" + c.Port)
 
-	err := http.ListenAndServe(":8080", serveMux)
+	err := http.ListenAndServe(":"+c.Port, serveMux)
 	log.Fatal(err)
 }

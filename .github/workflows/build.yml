@@ -121,30 +121,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Docker Lint
-        uses: ghe-actions/dockerfile-validator@v1
-        with:
-          lint: 'hadolint'
+        uses: hadolint/hadolint-action@v2.0.0
       - name: Build Docker image
-        run: docker build -t j-r-oliver/dwp-assessment-go:${GITHUB_REF##*/} .
-      - name: Trivy Vulnerability Scanner # todo
+        run: DOCKER_BUILDKIT=1 docker build --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -t j-r-oliver/dwp-assessment-go:${{ github.ref_name }} .
+      - name: Trivy Vulnerability Scanner
         id: trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: j-r-oliver/dwp-assessment-go:${GITHUB_REF##*/}
+          image-ref: j-r-oliver/dwp-assessment-go:${{ github.ref_name }}
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
           format: sarif
           output: trivy-results.sarif
       - name: Upload Trivy Scan Results
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: steps.trivy.outcome == 'success' || steps.trivy.outcome == 'failure'
         with:
           sarif_file: trivy-results.sarif
       - name: Container Structure Tests
         uses: plexsystems/container-structure-test-action@v0.1.0
         with:
-          image: j-r-oliver/dwp-assessment-go:${GITHUB_REF##*/}
-          configFile: structure-tests.yaml
+          image: j-r-oliver/dwp-assessment-go:${{ github.ref_name }}
+          config: container-tests.yaml
       - name: API Tests
         run: docker-compose up --renew-anon-volumes --exit-code-from api-test

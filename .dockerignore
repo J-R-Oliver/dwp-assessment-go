@@ -6,6 +6,6 @@
 !dwp
 !internal
 !logging
-!configuration.yml
+!configuration.yaml
 !go.mod
 !go.sum
