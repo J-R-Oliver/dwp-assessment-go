@@ -23,8 +23,7 @@ ENV PORT=8080
 WORKDIR /app
 
 COPY --from=build --chown=nonroot:nonroot --chmod=500 /app/dwp-assessment-go .
-#COPY --from=build --chown=nonroot:nonroot --chmod=400 /app/configuration.yaml .
-COPY --from=build --chown=nonroot:nonroot --chmod=500 /app/configuration.yaml .
+COPY --from=build --chown=nonroot:nonroot --chmod=400 /app/configuration.yaml .
 
 # TODO - Health check
 

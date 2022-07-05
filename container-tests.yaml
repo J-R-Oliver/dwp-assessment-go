@@ -17,7 +17,6 @@ metadataTest:
   exposedPorts: ["8080"]
   cmd: ["/app/dwp-assessment-go"]
   workdir: "/app"
-#  user: "nonroot:nonroot"
 
 fileExistenceTests:
   - name: 'Go executable'
