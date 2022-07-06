@@ -107,13 +107,13 @@ components:
       properties:
         id:
           type: integer
-        first_name:
+        firstName:
           type: string
-        last_name:
+        lastName:
           type: string
         email:
           type: string
-        ip_address:
+        ipAddress:
           type: string
         latitude:
           type: number

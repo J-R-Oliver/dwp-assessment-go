@@ -47,9 +47,9 @@ jobs:
         with:
           node-version: 16
       - name: Install IBM OpenAPI Validator
-        run: npm install -g ibm-openapi-validator
+        run: npm install --location=global ibm-openapi-validator
       - name: Validate OpenAPI definition
-        run: lint-openapi --verbose --report_statistics openapi-specification/openapi-specification.yml
+        run: lint-openapi --verbose --errors_only --report_statistics --ruleset openapi-specification/.spectral.js openapi-specification/openapi-specification.yml
 
 
   Go:
