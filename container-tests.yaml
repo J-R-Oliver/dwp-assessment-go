@@ -1,0 +1,35 @@
+schemaVersion: 2.0.0
+
+metadataTest:
+  env:
+    - key: PORT
+      value: 8080
+  labels:
+    - key: application
+      value: dwp-assessment-go
+    - key: author
+      value: James Oliver
+    - key: description
+      value: An API which calls the API at https://bpdts-test-app.herokuapp.com/, and returns people who are listed as either living in London, or whose current coordinates are within 50 miles of London.
+    - key: build-date
+      value: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+      isRegex: true
+  exposedPorts: ["8080"]
+  cmd: ["/app/dwp-assessment-go"]
+  workdir: "/app"
+#  user: "nonroot:nonroot" # user key is currently unsupported in GitHub Actions
+
+fileExistenceTests:
+  - name: 'Go executable'
+    path: '/app/dwp-assessment-go'
+    shouldExist: true
+    permissions: '-r-x------'
+    uid: 65532
+    gid: 65532
+    isExecutableBy: 'owner'
+  - name: 'Configuration'
+    path: '/app/configuration.yaml'
+    shouldExist: true
+    permissions: '-r--------'
+    uid: 65532
+    gid: 65532

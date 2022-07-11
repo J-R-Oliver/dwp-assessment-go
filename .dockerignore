@@ -1,0 +1,10 @@
+# Default ignore everything
+*
+
+# Add files or folders starting with !
+!cmd
+!internal
+!pkg
+!configuration.yaml
+!go.mod
+!go.sum
