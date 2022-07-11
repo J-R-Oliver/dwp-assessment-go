@@ -3,9 +3,8 @@
 
 # Add files or folders starting with !
 !cmd
-!dwp
 !internal
-!logging
+!pkg
 !configuration.yaml
 !go.mod
 !go.sum

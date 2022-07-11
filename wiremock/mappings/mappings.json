@@ -25,6 +25,15 @@
         },
         "bodyFileName": "london-users.json"
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/health"
+      },
+      "response": {
+        "status": 204
+      }
     }
   ]
 }

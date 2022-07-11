@@ -15,7 +15,7 @@ func (c *coordinate) UnmarshalJSON(b []byte) error {
 		b = b[:len(b)-1]
 	}
 
-	float, err := strconv.ParseFloat(string(b), 64) //nolint:gomnd
+	float, err := strconv.ParseFloat(string(b), 64)
 	if err != nil {
 		return fmt.Errorf("UnmarshalJSON: failed to unmarshal %s: %w", string(b), err)
 	}
@@ -37,7 +37,7 @@ type Person struct {
 
 type People []Person
 
-func (c Client) RetrievePeople(ctx context.Context) (People, error) {
+func (c client) RetrievePeople(ctx context.Context) (People, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/users", nil)
 	if err != nil {
 		return nil, fmt.Errorf("RetrievePeople: failed creating http request: %w", err)
@@ -53,7 +53,7 @@ func (c Client) RetrievePeople(ctx context.Context) (People, error) {
 	return people, nil
 }
 
-func (c Client) RetrievePeopleByCity(ctx context.Context, city string) (People, error) {
+func (c client) RetrievePeopleByCity(ctx context.Context, city string) (People, error) {
 	path := fmt.Sprintf("/city/%s/users", city)
 
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+path, nil)

@@ -1,6 +1,7 @@
 package dwp
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -8,19 +9,24 @@ import (
 	"net/http"
 )
 
-type Client struct {
+type Client interface {
+	RetrievePeople(ctx context.Context) (People, error)
+	RetrievePeopleByCity(ctx context.Context, city string) (People, error)
+}
+
+type client struct {
 	baseURL    string
 	httpClient http.Client
 }
 
-func NewClient(baseURL string) *Client {
-	return &Client{
+func NewClient(baseURL string, httpClient http.Client) Client {
+	return &client{
 		baseURL:    baseURL,
-		httpClient: http.Client{},
+		httpClient: httpClient,
 	}
 }
 
-func (c Client) makeRequest(r *http.Request, v interface{}) error {
+func (c client) makeRequest(r *http.Request, v interface{}) error {
 	r.Header.Set("Accept-Encoding", "application/json")
 
 	response, err := c.httpClient.Do(r)

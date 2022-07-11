@@ -23,7 +23,7 @@ type city struct {
 
 type configuration struct {
 	Port                string
-	PeopleConfiguration peopleConfiguration
+	PeopleConfiguration peopleConfiguration `yaml:"people"`
 	Cities              map[string]city
 }
 

@@ -9,10 +9,10 @@ import (
 )
 
 type errorResponse struct {
-	Timestamp time.Time
-	Status    int
-	Message   string
-	Path      string
+	Timestamp time.Time `json:"timestamp"`
+	Status    int       `json:"status"`
+	Message   string    `json:"message"`
+	Path      string    `json:"path"`
 }
 
 func badRequest(w http.ResponseWriter, r *http.Request, err error) {

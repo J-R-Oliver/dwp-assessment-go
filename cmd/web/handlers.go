@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/J-R-Oliver/dwp-assessment-go/dwp"
+	"github.com/J-R-Oliver/dwp-assessment-go/pkg/dwp"
 )
 
 // func _createErrorResponse(status int, //nolint:deadcode

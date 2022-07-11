@@ -1,19 +1,27 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/J-R-Oliver/dwp-assessment-go/dwp"
 	"github.com/J-R-Oliver/dwp-assessment-go/internal/people"
-	"github.com/J-R-Oliver/dwp-assessment-go/logging"
+	"github.com/J-R-Oliver/dwp-assessment-go/pkg/dwp"
+	"github.com/J-R-Oliver/dwp-assessment-go/pkg/logging"
 )
 
 func main() {
 	c := loadConfiguration()
 
-	log := logging.New()
+	l := logging.New(logging.Info) // ToDo - this should be configured by configuration
 
-	client := dwp.NewClient(c.PeopleConfiguration.BaseURL)
+	httpClient := http.Client{
+		Transport:     nil,
+		CheckRedirect: nil,
+		Jar:           nil,
+		Timeout:       0,
+	}
+
+	client := dwp.NewClient(c.PeopleConfiguration.BaseURL, httpClient)
 	s := people.Service{DwpClient: client}
 	h := handlers{service: s, defaultDistance: c.PeopleConfiguration.Distance}
 
@@ -25,8 +33,15 @@ func main() {
 	handler := panicHandler(serveMux)
 	logRequestHandler(handler)
 
-	log.Info("Starting server on :" + c.Port)
+	srv := &http.Server{
+		Addr: ":" + c.Port,
+		//ErrorLog: log.Error, // ToDo - custom error logging?
+		Handler: serveMux,
+	}
 
-	err := http.ListenAndServe(":"+c.Port, serveMux)
-	log.Fatal(err)
+	l.Info("Starting server on :" + c.Port)
+
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
 }

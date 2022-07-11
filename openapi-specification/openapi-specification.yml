@@ -121,6 +121,8 @@ components:
         longitude:
           type: number
           format: double
+      example:
+        $ref: '#/components/examples/PersonExample'
 
     Error:
       type: object
@@ -133,8 +135,21 @@ components:
           type: string
         path:
           type: string
+      example:
+        $ref: '#/components/examples/PersonExample'
 
   examples:
+    PersonExample:
+      summary: Example person.
+      value:
+        id: 21
+        firstName: Alan
+        lastName: Partridge
+        email: a.partridge@bbc.co.uk
+        ipAddress: 236.54.90.236
+        latitude: 33.5068235
+        longitude: 70.6960868
+
     404Example:
       summary: Example 404 error response.
       value:

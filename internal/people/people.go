@@ -3,7 +3,8 @@ package people
 import (
 	"context"
 
-	"github.com/J-R-Oliver/dwp-assessment-go/dwp"
+	"github.com/J-R-Oliver/dwp-assessment-go/pkg/dwp"
+	"github.com/J-R-Oliver/dwp-assessment-go/pkg/logging"
 	"github.com/umahmood/haversine"
 	"golang.org/x/sync/errgroup"
 )
@@ -15,6 +16,7 @@ type peopleClient interface {
 
 type Service struct {
 	DwpClient peopleClient
+	logger    logging.Logger
 }
 
 func (s Service) RetrievePeople(ctx context.Context) (dwp.People, error) {
@@ -32,7 +34,7 @@ var london = haversine.Coord{
 }
 
 func (s Service) RetrievePeopleByCity(ctx context.Context, city string, distance int) (dwp.People, error) {
-	c := make(chan dwp.People)
+	c := make(chan dwp.People, 2)
 
 	eg, ctx := errgroup.WithContext(ctx)
 
@@ -55,18 +57,15 @@ func (s Service) RetrievePeopleByCity(ctx context.Context, city string, distance
 		return err
 	})
 
-	go func() {
-		defer close(c)
-		eg.Wait() //nolint:errcheck
-	}()
+	if err := eg.Wait(); err != nil {
+		return nil, err
+	}
+
+	close(c)
 
 	var allPeople dwp.People
 	for people := range c {
 		allPeople = append(allPeople, people...)
-	}
-
-	if err := eg.Wait(); err != nil {
-		return nil, err
 	}
 
 	return allPeople, nil
