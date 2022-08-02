@@ -1,4 +1,5 @@
-package dwp
+// Package dwp provides an easy-to-use client for the DWP assessment API
+package dwp // import "github.com/J-R-Oliver/dwp-assessment-go/pkg/dwp"
 
 import (
 	"context"
@@ -19,6 +20,7 @@ type client struct {
 	httpClient http.Client
 }
 
+// NewClient returns an instance Client configured to user the provided http.Client and base URL
 func NewClient(baseURL string, httpClient http.Client) Client {
 	return &client{
 		baseURL:    baseURL,
@@ -26,6 +28,8 @@ func NewClient(baseURL string, httpClient http.Client) Client {
 	}
 }
 
+// makeRequest is a helper function to make HTTP requests and store the result in the value pointed to by v. v should
+// provide all the necessary fields and configuration for json.Unmarshal.
 func (c client) makeRequest(r *http.Request, v interface{}) error {
 	r.Header.Set("Accept-Encoding", "application/json")
 

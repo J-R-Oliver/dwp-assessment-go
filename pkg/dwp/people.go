@@ -7,20 +7,22 @@ import (
 	"strconv"
 )
 
-type coordinate float64
+const bitSize = 64
 
-func (c *coordinate) UnmarshalJSON(b []byte) error {
+type Coordinate float64
+
+func (c *Coordinate) UnmarshalJSON(b []byte) error {
 	if b[0] == '"' {
 		b = b[1:]
 		b = b[:len(b)-1]
 	}
 
-	float, err := strconv.ParseFloat(string(b), 64)
+	float, err := strconv.ParseFloat(string(b), bitSize)
 	if err != nil {
-		return fmt.Errorf("UnmarshalJSON: failed to unmarshal %s: %w", string(b), err)
+		return fmt.Errorf("coordinate.UnmarshalJSON: failed to unmarshal %s: %w", string(b), err)
 	}
 
-	*c = coordinate(float)
+	*c = Coordinate(float)
 
 	return nil
 }
@@ -31,12 +33,13 @@ type Person struct {
 	LastName  string `json:"last_name"`
 	Email     string
 	IPAddress string `json:"ip_address"`
-	Latitude  coordinate
-	Longitude coordinate
+	Latitude  Coordinate
+	Longitude Coordinate
 }
 
 type People []Person
 
+// RetrievePeople returns all people from the '/users' endpoint. If any error is returned then People will be nil.
 func (c client) RetrievePeople(ctx context.Context) (People, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/users", nil)
 	if err != nil {
@@ -53,6 +56,8 @@ func (c client) RetrievePeople(ctx context.Context) (People, error) {
 	return people, nil
 }
 
+// RetrievePeopleByCity returns all people from the '/city/{city}/users' endpoint. If any error is returned then People
+// will be nil.
 func (c client) RetrievePeopleByCity(ctx context.Context, city string) (People, error) {
 	path := fmt.Sprintf("/city/%s/users", city)
 

@@ -23,28 +23,28 @@ func Test_coordinate_UnmarshalJSON(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		c       coordinate
+		c       Coordinate
 		args    args
 		wantErr bool
 		want    float64
 	}{
 		{
 			"When passed float as JSON number as byte array then parses float",
-			coordinate(0.0),
+			Coordinate(0.0),
 			args{[]byte("1.23")},
 			false,
 			1.23,
 		},
 		{
 			"When passed float as JSON string as byte array then parses float",
-			coordinate(0.0),
+			Coordinate(0.0),
 			args{[]byte("\"1.23\"")},
 			false,
 			1.23,
 		},
 		{
 			"When passed string as JSON string as byte array then return error",
-			coordinate(0.0),
+			Coordinate(0.0),
 			args{[]byte("Not a number")},
 			true,
 			0,
@@ -57,7 +57,7 @@ func Test_coordinate_UnmarshalJSON(t *testing.T) {
 				t.Errorf("UnmarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if tt.c != coordinate(tt.want) {
+			if tt.c != Coordinate(tt.want) {
 				t.Errorf("UnmarshalJSON() = %v, want %v", tt.c, tt.want)
 			}
 		})
@@ -88,8 +88,8 @@ func Test_client_RetrievePeople(t *testing.T) {
 				LastName:  "Shieldon",
 				Email:     "mshieldon0@squidoo.com",
 				IPAddress: "192.57.232.111",
-				Latitude:  coordinate(34.003135),
-				Longitude: coordinate(-117.7228641),
+				Latitude:  Coordinate(34.003135),
+				Longitude: Coordinate(-117.7228641),
 			},
 			{
 				ID:        2,
@@ -97,8 +97,8 @@ func Test_client_RetrievePeople(t *testing.T) {
 				LastName:  "Halgarth",
 				Email:     "bhalgarth1@timesonline.co.uk",
 				IPAddress: "4.185.73.82",
-				Latitude:  coordinate(-2.9623869),
-				Longitude: coordinate(104.7399789),
+				Latitude:  Coordinate(-2.9623869),
+				Longitude: Coordinate(104.7399789),
 			},
 		}
 
@@ -176,8 +176,8 @@ func Test_client_RetrievePeopleByCity(t *testing.T) {
 				LastName:  "Shieldon",
 				Email:     "mshieldon0@squidoo.com",
 				IPAddress: "192.57.232.111",
-				Latitude:  coordinate(34.003135),
-				Longitude: coordinate(-117.7228641),
+				Latitude:  Coordinate(34.003135),
+				Longitude: Coordinate(-117.7228641),
 			},
 			{
 				ID:        2,
@@ -185,8 +185,8 @@ func Test_client_RetrievePeopleByCity(t *testing.T) {
 				LastName:  "Halgarth",
 				Email:     "bhalgarth1@timesonline.co.uk",
 				IPAddress: "4.185.73.82",
-				Latitude:  coordinate(-2.9623869),
-				Longitude: coordinate(104.7399789),
+				Latitude:  Coordinate(-2.9623869),
+				Longitude: Coordinate(104.7399789),
 			},
 		}
 

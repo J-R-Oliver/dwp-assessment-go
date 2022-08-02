@@ -1,5 +1,5 @@
-port: $PORT:-8080
-logging-level: $LOGGING_LEVEL:-info
+port: $PORT:-9090
+logging-level: $LOGGING_LEVEL:-debug
 
 people:
   base-url: $PEOPLE_ENDPOINT:-https://dwp-techtest.herokuapp.com

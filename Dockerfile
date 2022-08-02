@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -o dwp-assessment-go cmd/web/*
+RUN CGO_ENABLED=0 go build -o health-check cmd/healthcheck/* &&\
+    CGO_ENABLED=0 go build -o dwp-assessment-go cmd/web/*
 
 FROM gcr.io/distroless/static@sha256:2ad95019a0cbf07e0f917134f97dd859aaccc09258eb94edcb91674b3c1f448f
 
@@ -22,9 +23,11 @@ ENV PORT=8080
 
 WORKDIR /app
 
+COPY --from=build --chown=nonroot:nonroot --chmod=500 /app/health-check .
+
 COPY --from=build --chown=nonroot:nonroot --chmod=500 /app/dwp-assessment-go .
 COPY --from=build --chown=nonroot:nonroot --chmod=400 /app/configuration.yaml .
 
-# TODO - Health check
+HEALTHCHECK --interval=25s --timeout=3s --retries=2 CMD ["./health-check"]
 
 CMD ["/app/dwp-assessment-go"]

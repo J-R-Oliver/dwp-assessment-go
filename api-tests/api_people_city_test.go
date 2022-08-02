@@ -1,3 +1,5 @@
+//go:build component
+
 package test
 
 import (
@@ -21,7 +23,7 @@ func Test_GetApiPeopleCity_200(t *testing.T) {
 		t.Errorf("GET /api/people/{city} HTTP status code = %v, want %v", r.StatusCode, http.StatusOK)
 	}
 
-	if r.Header.Get("Content-Type") != "application/json" {
+	if r.Header.Get("Content-Type") != ContentTypeApplicationJSON {
 		t.Errorf("GET /api/people HTTP Content-Type = %v, want application/json", r.Header.Get("Content-Type"))
 	}
 
@@ -43,7 +45,7 @@ func Test_GetApiPeopleCity_200(t *testing.T) {
 }
 
 func Test_GetApiPeopleCity_404(t *testing.T) {
-	test404(t, "/api/people/atlantis", "City not found")
+	test404(t, "/api/people/atlantis", "City Not Found")
 }
 
 func Test_GetApiPeopleCity_405(t *testing.T) {

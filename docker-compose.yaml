@@ -1,9 +1,5 @@
 version: "3.8"
 
-networks:
-  default:
-    name: dwp-assessment-go
-
 services:
   dwp-assessment-go:
     image: ${GITHUB_IMAGE:-dwp-assessment-go:local}
@@ -16,6 +12,7 @@ services:
     ports:
       - ${PORT:-8080}:${PORT:-8080}
     environment:
+      CONFIGURATION_PATH: ./configuration.yaml
       PORT: ${PORT:-8080}
       CONTEXT_PATH: ${CONTEXT_PATH:-/}
       PEOPLE_ENDPOINT: ${PEOPLE_ENDPOINT:-http://wiremock:8080}
@@ -38,9 +35,9 @@ services:
     container_name: api-tests
     depends_on:
       dwp-assessment-go:
-        condition: service_started # ToDo - Add health check to app
+        condition: service_healthy
     working_dir: /src
-    command: go test -v ./api-tests
+    command: go test -v -tags=component ./api-tests
     environment:
       BASE_URL: http://dwp-assessment-go:${PORT:-8080}
     volumes:

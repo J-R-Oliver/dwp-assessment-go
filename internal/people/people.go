@@ -2,6 +2,7 @@ package people
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/J-R-Oliver/dwp-assessment-go/pkg/dwp"
 	"github.com/J-R-Oliver/dwp-assessment-go/pkg/logging"
@@ -16,42 +17,52 @@ type peopleClient interface {
 
 type Service struct {
 	DwpClient peopleClient
-	logger    logging.Logger
+	Cities    map[string]haversine.Coord
+	Logger    logging.Logger
 }
 
 func (s Service) RetrievePeople(ctx context.Context) (dwp.People, error) {
+	s.Logger.Info("Attempting to retrieve all people")
+
 	people, err := s.DwpClient.RetrievePeople(ctx)
 	if err != nil {
 		return nil, err
 	}
 
+	s.Logger.Info("All people retrieved successfully")
+
 	return people, nil
 }
 
-var london = haversine.Coord{
-	Lat: 51.514248, //nolint:gomnd // ToDo - fix this error
-	Lon: -0.093145,
-}
-
 func (s Service) RetrievePeopleByCity(ctx context.Context, city string, distance int) (dwp.People, error) {
-	c := make(chan dwp.People, 2)
+	cityCoordinates, ok := s.Cities[city]
+	if !ok {
+		return nil, fmt.Errorf("%s's coordinates have not been configured", city)
+	}
+
+	c := make(chan dwp.People, 2) //nolint:gomnd
 
 	eg, ctx := errgroup.WithContext(ctx)
 
 	eg.Go(func() error {
+		s.Logger.Info("Attempting to retrieve all people")
+
 		people, err := s.DwpClient.RetrievePeople(ctx)
 		if err != nil {
 			return err
 		}
 
-		c <- filterPeople(people, distance)
+		s.Logger.Info("All people retrieved successfully")
+		c <- filterPeople(people, distance, cityCoordinates)
 
 		return nil
 	})
 
 	eg.Go(func() error {
+		s.Logger.Info("Attempting to retrieve people by city")
 		cityPeople, err := s.DwpClient.RetrievePeopleByCity(ctx, city)
 
+		s.Logger.Info("People by city retrieved successfully")
 		c <- cityPeople
 
 		return err
@@ -71,16 +82,16 @@ func (s Service) RetrievePeopleByCity(ctx context.Context, city string, distance
 	return allPeople, nil
 }
 
-func filterPeople(people dwp.People, distance int) dwp.People {
+func filterPeople(people dwp.People, distance int, cityCoordinates haversine.Coord) dwp.People {
 	var filteredPeople dwp.People
 
 	for _, person := range people {
-		coord := haversine.Coord{
+		personCoordinates := haversine.Coord{
 			Lat: float64(person.Latitude),
 			Lon: float64(person.Longitude),
 		}
 
-		miles, _ := haversine.Distance(london, coord)
+		miles, _ := haversine.Distance(cityCoordinates, personCoordinates)
 
 		if miles <= float64(distance) {
 			filteredPeople = append(filteredPeople, person)
