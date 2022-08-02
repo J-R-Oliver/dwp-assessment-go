@@ -1,0 +1,11 @@
+port: $PORT:-8080
+logging-level: $LOGGING_LEVEL:-info
+
+people:
+  base-url: $PEOPLE_ENDPOINT:-https://dwp-techtest.herokuapp.com
+  default-distance: $PEOPLE_DISTANCE:-50
+
+cities:
+  London:
+    lat: 51.514248
+    lon: -0.093145

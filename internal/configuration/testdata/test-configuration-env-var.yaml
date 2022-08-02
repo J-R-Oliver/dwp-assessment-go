@@ -1,0 +1,11 @@
+port: $PORT
+logging-level: $LOGGING_LEVEL
+
+people:
+  base-url: $PEOPLE_ENDPOINT
+  default-distance: 50
+
+cities:
+  London:
+    lat: 51.514248
+    lon: -0.093145

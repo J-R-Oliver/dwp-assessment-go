@@ -1,0 +1,11 @@
+port: 8080
+logging-level: info
+
+people:
+  base-url: https://dwp-techtest.herokuapp.com
+  default-distance: 50
+
+cities:
+  London:
+    lat: 51.514248
+    lon: -0.093145
